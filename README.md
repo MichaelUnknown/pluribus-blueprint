@@ -2,7 +2,7 @@
 
 An offline blueprint-strategy trainer for six-player no-limit Texas hold'em, inspired by Brown and Sandholm's [Pluribus paper](https://noambrown.com/papers/19-Science-Superhuman.pdf) and [supplement](https://noambrown.com/papers/19-Science-Superhuman_Supp.pdf).
 
-**Status:** specification and project setup. The trainer, API, and dashboard are not implemented yet; there are no build or run commands at this stage.
+**Status:** milestone 1 foundation implemented: C++20/CMake library, v2 model reader, card canonicalization, 169 preflop classes, model verification/query CLI and dataset-free tests. Complete external-model integration validation is still pending. The trainer, API and dashboard are not implemented yet.
 
 ## Planned scope
 
@@ -18,7 +18,7 @@ This project computes a blueprint. Real-time search and off-tree action translat
 - [Blueprint technical specification and input formats](docs/blueprint-implementation.md)
 - [Preliminary dashboard specification](docs/blueprint-dashboard-spec.md)
 
-Proposed commands, APIs, and formats in these documents are design targets, not implemented features. The dashboard mockup referenced in its specification is a separate design preview, not included in this repository.
+The [model-import guide](docs/model-import.md) documents implemented build, test, configuration and CLI commands. Other proposed trainer commands, APIs and formats remain design targets. The dashboard mockup referenced in its specification is a separate design preview, not included in this repository.
 
 ## Implementation sequence
 
@@ -39,4 +39,12 @@ Milestones may span multiple focused PRs. Dashboard contracts begin at milestone
 
 ## Development
 
-Planned implementation lives in `backend/` and `frontend/`; specifications live in `docs/`. Follow the root and directory-specific `AGENTS.md` instructions and submit focused pull requests. Build, test, and deployment instructions will be added with their implementations.
+Backend implementation lives in `backend/`; the planned dashboard lives in `frontend/`. Follow the root and directory-specific `AGENTS.md` instructions and submit focused pull requests.
+
+```sh
+cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+cmake --build build --parallel
+ctest --test-dir build --output-on-failure
+```
+
+See the [model-import guide](docs/model-import.md) for dependencies and complete-model integration checks.

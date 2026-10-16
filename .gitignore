@@ -7,3 +7,5 @@
 /frontend/dist/
 /frontend/test-results/
 /frontend/playwright-report/
+__pycache__/
+*.bin

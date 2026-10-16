@@ -3,7 +3,7 @@
 These instructions apply to `backend/` and supplement the repository-wide `AGENTS.md`.
 
 ## Stack and structure
-- Use C++20 and CMake. No `backend/CMakeLists.txt` exists yet; introduce build targets with the first implementation and document working build/test commands.
+- Use C++20 and CMake. Build targets exist in the root and `backend/CMakeLists.txt`; working build/test commands are documented in `docs/model-import.md`.
 - Keep public interfaces in `include/<libname>/`, implementations in `src/`, API implementation in `src/api/`, and tests in `tests/`.
 - Keep the poker engine and trainer usable without the HTTP service or dashboard.
 - Prefer the C++ standard library and standard algorithms when they provide an appropriate solution.
