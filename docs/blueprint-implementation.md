@@ -1,16 +1,18 @@
-# Implementation plan: a Pluribus-style blueprint strategy
+# Technical specification: a Pluribus-style blueprint strategy
 
 ## 1. Goal, sources, and scope
 
-This document specifies a **new offline training program** for six-player no-limit Texas hold'em. Its inputs are three finished, complete information abstractions with 200 buckets each for the flop, turn, and river. Its output is a persistent distribution over legal actions for every represented abstract information set. The existing `train` command trains clusters, **not a poker strategy**.
+This document specifies a **new offline training program** for six-player no-limit Texas hold'em. Its inputs are three finished, complete information abstractions with 200 buckets each for the flop, turn, and river. Its output is a persistent distribution over legal actions for every represented abstract information set. The producer program's `train` command in [pluribus-information-abstraction](https://github.com/MichaelUnknown/pluribus-information-abstraction) trains clusters, **not a poker strategy**. This repository does not yet implement a training command.
 
-The existing data interface was checked against repository commit `24615f8a018e68669c96fa60b2e0b03a95c11e64`. Section 3 is a self-contained contract: an implementer needs the three binary models, but neither this repository's source code nor a running API server. All new CLI names, export formats, and architectural decisions below are **proposals**, not features that have already been implemented.
+The existing data interface was checked against producer repository commit [`24615f8a018e68669c96fa60b2e0b03a95c11e64`](https://github.com/MichaelUnknown/pluribus-information-abstraction/commit/24615f8a018e68669c96fa60b2e0b03a95c11e64). Section 3 is a self-contained contract: an implementer needs the three binary models, but neither the producer repository's source code nor its running API server. All new CLI names, export formats, and architectural decisions below are **proposals**, not features that have already been implemented.
+
+Implementation order and milestone numbers are defined exclusively in the [implementation roadmap](implementation-roadmap.md). This document specifies the target technical behavior; its section numbers are not milestones.
 
 Sources:
 
 - [Brown/Sandholm, Science 2019, main article](https://noambrown.com/papers/19-Science-Superhuman.pdf), especially abstraction and self-play.
 - [Supplement](https://noambrown.com/papers/19-Science-Superhuman_Supp.pdf), printed pages 12–18, especially Algorithm 1.
-- Existing format contract: `backend/src/storage.cpp`, `storage_detail.hpp`, `catalogue.cpp`, `cards.cpp`, `features.cpp`, and `backend/CMakeLists.txt` at the commit above. These sources provide traceability; all details required for import are included below.
+- Existing format contract: `backend/src/storage.cpp`, `storage_detail.hpp`, `catalogue.cpp`, `cards.cpp`, `features.cpp`, and `backend/CMakeLists.txt` in the producer repository at the commit above. These sources provide traceability; all details required for import are included below.
 
 ### Published parameters and limits of reproduction
 
@@ -320,21 +322,13 @@ Concrete initial portable proposal: a JSON manifest (`blueprint-checkpoint-v1` o
 
 Before export, validate policies for finiteness, nonnegativity, and a positive sum; renormalize on reading after Float32 conversion. Add probability quantization only later, with an error budget. Checkpoint records can use the same key with an f64 regret vector; store preflop counters and RNG states in separately typed shards. Write and validate all shards completely, then atomically publish the manifest last. Synchronize files and the directory for crash durability. Resume must reject hash/profile mismatches and preserve the old checkpoint until the new commit is complete.
 
-## 8. Implementation order and acceptance criteria
+## 8. Delivery and validation
 
-| Step | Deliverable | Acceptance criteria before the next step |
-| --- | --- | --- |
-| 1 | Standalone v2 reader and BucketProvider | All three keys above, suit/order invariance, rejection of incorrect version/checksum/truncation/ID/coverage; supplied production models validated |
-| 2 | Poker engine without abstraction | Fixed hands verify minimum raises, short all-ins, reopening, side pots, splits, uncalled bets, action order, and chip conservation |
-| 3 | Action tree and information index | Deterministic action lists; identical infosets have identical actions; opponent/future cards do not change the player's policy |
-| 4 | Unpruned single-threaded MCCFR | Hand-calculable single-step regret test, Kuhn/Leduc comparison with exact CFR, and decreasing exploitability in an appropriate two-player test |
-| 5 | Six-player pilot with small stacks | Legal complete hands, all streets and three models integrated; no missing lookup keys; RAM/nodes per second measured |
-| 6 | Averaging, snapshots, export, and resume | Policy sums, uniform missing snapshot states, seed replay, resumed run matches uninterrupted reference run |
-| 7 | Discounting and pruning | Boundary times/floor/zero-regret case checked; river/terminal actions exempt; full traversals allow actions to return |
-| 8 | Scaling/parallelization | No data races, consistent snapshot view, reproducible reference mode, measured RAM/throughput improvements |
-| 9 | Full 100-BB training | Fixed model/profile bindings, periodic exports, independent evaluation, and documented resources |
+Follow the [ten-milestone implementation roadmap](implementation-roadmap.md) for sequencing, dependencies and acceptance gates. It supersedes the former nine-step table in this section.
 
-For Step 1, use small synthetic files with known bytes as well as golden models supplied by the producer. Synthetic pilots test the parser but do not replace a full coverage check. For MCCFR tests, do not write tests that merely repeat the same implementation to compute the expected result.
+The single-threaded reference and small-game averaging oracle arrive in milestone 4. Milestone 6 adds checkpoint/resume and explicitly labelled current-policy inspection exports; milestone 7 makes those snapshots browsable. Production averaging and training refinements arrive in milestone 8, followed by scaling in 9 and operational readiness in 10. A full 100-BB training campaign is an experiment after readiness, not a required CI run.
+
+For model import, use small synthetic files with known bytes and producer-supplied golden models. Synthetic pilots test the parser but do not establish complete coverage. For MCCFR, use independent expected results rather than repeating the implementation under test.
 
 Proposed new CLI (not yet available):
 

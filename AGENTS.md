@@ -13,7 +13,7 @@ These instructions apply throughout the repository. More specific `AGENTS.md` fi
 - This repository currently contains specifications and development conventions, not a runnable trainer or dashboard. Treat the stacks below as implementation targets until their build files exist.
 - `backend/`: C++20 / CMake poker engine, blueprint trainer, artifact readers, and API.
 - `frontend/`: Vue 3 / TypeScript / Vite dashboard for training progress and strategy inspection.
-- `docs/`: implementation and interface specifications. Read `README.md`, `docs/blueprint-implementation.md`, and `docs/blueprint-dashboard-spec.md` before changing architecture or contracts.
+- `docs/`: implementation and interface specifications. Read `README.md`, `docs/implementation-roadmap.md`, `docs/blueprint-implementation.md`, and `docs/blueprint-dashboard-spec.md` before changing architecture or contracts.
 - Docker images and deployment configuration are future work; do not assume they exist.
 - The implementation document's producer source paths and pinned revision refer to the separate information-abstraction repository, not this repository.
 - Distinguish published Pluribus details, proposed reconstruction choices, and implemented behavior. Do not describe proposed commands or APIs as available.
@@ -35,4 +35,5 @@ These instructions apply throughout the repository. More specific `AGENTS.md` fi
 - Use the repository's `.clang-format` for C++ rather than relying on textual style guidance alone.
 - Follow `frontend/.prettierrc.json` for frontend code.
 - Keep repository documentation in English and update relevant specifications when contracts change.
+- Keep delivery order and milestone numbering authoritative in `docs/implementation-roadmap.md`; other documents should link to it and use the same numbering. Milestones may span multiple focused PRs.
 - Format only the files touched by the task; avoid repository-wide formatting churn.

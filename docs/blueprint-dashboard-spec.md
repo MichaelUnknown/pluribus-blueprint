@@ -1,6 +1,6 @@
 # Blueprint dashboard — preliminary specification
 
-Status: proposal v0.1, 16 October 2026. Companion to the eight-step blueprint trainer implementation plan. UI language: English, matching the implementation document. The accompanying interactive mockup uses synthetic data only; it does not connect to a trainer.
+Status: proposal v0.1, 16 October 2026. Companion to the [ten-milestone implementation roadmap](implementation-roadmap.md). UI language: English, matching the implementation document. The separate interactive mockup (not included in this repository) uses synthetic data only; it does not connect to a trainer.
 
 ## 1. Purpose and scope
 
@@ -52,7 +52,7 @@ A bucket is not a concrete hand, a strength rank, or an opponent range. Bucket 4
 - Right/below: private-class selector; action probabilities and child navigation. Optional diagnostics show regret and sample count only when the selected artifact actually contains them.
 - At chance boundaries: advance to the next abstract street. A separate optional scenario mode accepts board cards and one player's private cards and performs bucket lookup. No fabricated chance probabilities over buckets.
 
-The local mockup offers a deliberately small but legal sequence: UTG acts with pot 150, raises to 350, HJ then folds, CO then folds. Pot remains 500 after either fold; HJ/CO each face 350 to call. SB/BB retain their blind contributions. Changing the private-class selector changes the synthetic policy without changing public state. Branches absent from the demo are explicitly disabled; this is not a complete tree simulator.
+The local mockup offers a deliberately small but legal sequence: UTG acts with pot 150, raises to 350, HJ then folds, and CO is next to act. Pot remains 500 after HJ folds; HJ/CO each face 350 to call. SB/BB retain their blind contributions. Changing the private-class selector changes the synthetic policy without changing public state. Branches absent from the demo are explicitly disabled; this is not a complete tree simulator.
 
 ### 4.3 Policy semantics
 
@@ -62,7 +62,7 @@ Unallocated information sets may use the trainer's documented uniform initial po
 
 Default action weights are conditional on the selected private class. A “whole-range” strategy requires an explicit weighting distribution (uniform combinations, supplied range or estimated reach) and must not be produced by averaging 200 buckets uniformly. In particular, bucket occupancy from information abstraction is not a learned range.
 
-### 4.4 Scenario mode (second increment)
+### 4.4 Scenario mode (optional follow-up to milestone 7)
 
 Accept current street, board of exactly 3/4/5 cards and two private cards for a named player. Reject duplicates, malformed cards and incompatible round/model. Reuse the versioned BucketProvider. Display canonical key and bucket as optional diagnostics. Preserve actual reveal history in the scenario even though bucket lookup uses an unordered board.
 
@@ -128,17 +128,22 @@ Bind local deployments to loopback by default; remote use requires authenticatio
 
 Keyboard-accessible navigation and native buttons/selects; visible focus, text labels for status and action categories, colour-independent probability values. Responsive layout stacks panels; large tables paginate. Desktop target 1280 px and above, usable at 360 px. Preserve selections in browser history/deep links in the real product. Clearly label all mockup data as synthetic.
 
-## 8. Delivery plan within the eight trainer steps
+## 8. Delivery mapping
 
-| Increment | Dependency | Deliverable |
+Milestone numbers refer to the [implementation roadmap](implementation-roadmap.md), the authoritative delivery sequence.
+
+| Dashboard increment | Milestone | Deliverable |
 | --- | --- | --- |
-| D1: Contracts + UI shell | Trainer steps 1–3 | Typed API schemas, synthetic fixtures, overview and tree mockup, basic public-state navigation |
-| D2: Read-only telemetry | Step 4 | Live progress, bounded metrics/events, reconnect/stale states; benchmark overhead |
-| D3: Snapshot tree explorer | Step 5 | Immutable snapshot browsing, per-class policy, fallback/error semantics, deep links |
-| D4: Training phases + scale | Steps 6–7 | Discount/pruning indicators, paginated large histories, retention/cache behaviour |
-| D5: Evaluation + scenario mode | Step 8 | Board/hand resolution and optional frozen-opponent evaluation results |
+| Contracts and fixtures | 3 | Typed API contracts, synthetic fixtures and public-state navigation design |
+| Read-only progress dashboard | 5, using training data from 4 | UI scaffold, live metrics/events, stale/reconnect behavior and overhead measurements |
+| Persistence integration | 6 | Checkpoint status and immutable current-policy snapshot discovery |
+| Snapshot tree explorer | 7, using artifacts from 6 | Per-class policies, lazy history navigation, deep links and fallback/error semantics |
+| Optional scenario mode | Follow-up to 7 | Board/hand resolution through BucketProvider; no dependency on evaluation |
+| Averaging and training phases | 8 | Policy-kind selection, warm-up/discount/pruning state and valid averaged exports |
+| Scale and retention | 9 | Bounded caches, large-tree behavior and consistent snapshots under parallel training |
+| Evaluation display | 10 | Optional presentation of frozen-opponent results and confidence intervals |
 
-Avoid blocking the trainer on frontend work: publish fixtures/contracts early, then replace mock adapters with the real service. No browser should need to load an entire model or blueprint.
+Avoid blocking backend implementation on frontend completion. Publish contracts and fixtures early, then replace mock adapters with the real service. Before a capability exists, show it as unavailable: milestone 5 does not imply checkpoint support, and milestone 7 does not imply an averaged production policy. No browser should need to load an entire model or blueprint.
 
 ## 9. Acceptance scenarios
 

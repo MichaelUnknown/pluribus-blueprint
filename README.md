@@ -14,23 +14,28 @@ This project computes a blueprint. Real-time search and off-tree action translat
 
 ## Documentation
 
-- [Blueprint implementation plan and input formats](docs/blueprint-implementation.md)
+- [Ten-milestone implementation roadmap](docs/implementation-roadmap.md)
+- [Blueprint technical specification and input formats](docs/blueprint-implementation.md)
 - [Preliminary dashboard specification](docs/blueprint-dashboard-spec.md)
 
 Proposed commands, APIs, and formats in these documents are design targets, not implemented features. The dashboard mockup referenced in its specification is a separate design preview, not included in this repository.
 
 ## Implementation sequence
 
-1. Project foundation, model import, and preflop classes.
-2. Complete poker engine and card sampling.
-3. Action abstraction and information-set indexing.
-4. Single-threaded MCCFR reference trainer.
-5. Strategy averaging, snapshots, export, and resume.
-6. Discounting and negative-regret pruning.
-7. Memory optimization and parallelization.
-8. Independent evaluation and full 100-BB training.
+The [implementation roadmap](docs/implementation-roadmap.md) is the authoritative sequence:
 
-Dashboard contracts can start alongside steps 1–3, live telemetry after step 4, and snapshot-based policy browsing after step 5.
+1. Project foundation and model import.
+2. Poker engine.
+3. Abstract game tree and storage contracts.
+4. Reference MCCFR and initial evaluation.
+5. Telemetry and progress dashboard.
+6. Persistence and resume.
+7. Snapshot-based tree explorer.
+8. Strategy averaging and training refinements.
+9. Scaling and parallelization.
+10. Operational readiness and systematic evaluation.
+
+Milestones may span multiple focused PRs. Dashboard contracts begin at milestone 3, live progress arrives in 5, and snapshot-based browsing in 7. Full training is a subsequent experimental campaign, not a routine implementation test.
 
 ## Development
 
