@@ -1,0 +1,9 @@
+/build*/
+/backend/build*/
+/data/
+/pilot/
+*.tmp
+/frontend/node_modules/
+/frontend/dist/
+/frontend/test-results/
+/frontend/playwright-report/
