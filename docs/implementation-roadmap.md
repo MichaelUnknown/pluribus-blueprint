@@ -1,6 +1,6 @@
 # Implementation roadmap
 
-This document is the authoritative implementation sequence for the blueprint trainer and dashboard. It replaces the earlier eight-step outline and nine-step acceptance table. Milestone 1 is implemented with synthetic-fixture validation; complete external-model integration validation remains pending. Milestones 2–10 remain planned.
+This document is the authoritative implementation sequence for the blueprint trainer and dashboard. It replaces the earlier eight-step outline and nine-step acceptance table. Milestone 1 is implemented with synthetic-fixture validation; complete external-model integration validation remains pending. Milestone 2 is implemented and validated with deterministic, dataset-free engine/evaluator tests. Milestones 3–10 remain planned.
 
 The [technical specification](blueprint-implementation.md) defines algorithms and artifact contracts; the [dashboard specification](blueprint-dashboard-spec.md) defines UI and API behavior. Their section numbers are not implementation milestone numbers.
 
@@ -51,6 +51,8 @@ The table is a delivery order, not a requirement that backend work wait for the 
 - Simulate complete legal hands deterministically from a seed.
 - Test chip conservation and fixed edge-case hands independently of bucket classes.
 - Preserve hidden-information boundaries and prevent state leakage across copied or undone branches.
+
+**Implementation status:** The reference engine, deterministic deck sampler, 5–7-card evaluator, public/player observations, copy-based branching, settlement and `simulate-hand` smoke command are implemented. See the [poker-engine guide](poker-engine.md) for rules, API and checks.
 
 **Boundary:** Concrete legal actions are engine behavior; the limited bet-size menu is introduced in milestone 3.
 
