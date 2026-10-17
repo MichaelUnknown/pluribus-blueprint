@@ -1,6 +1,6 @@
 # Implementation roadmap
 
-This document is the authoritative implementation sequence for the blueprint trainer and dashboard. It replaces the earlier eight-step outline and nine-step acceptance table. All ten milestones below are planned, not completed.
+This document is the authoritative implementation sequence for the blueprint trainer and dashboard. It replaces the earlier eight-step outline and nine-step acceptance table. Milestone 1 is implemented with synthetic-fixture validation; complete external-model integration validation remains pending. Milestones 2–10 remain planned.
 
 The [technical specification](blueprint-implementation.md) defines algorithms and artifact contracts; the [dashboard specification](blueprint-dashboard-spec.md) defines UI and API behavior. Their section numbers are not implementation milestone numbers.
 
@@ -38,6 +38,8 @@ The table is a delivery order, not a requirement that backend work wait for the 
 - Check the specification's canonical-key vectors, suit/card-order invariance, dimensions, checksums and round compatibility.
 - Reject malformed files and incomplete production coverage. Keep intentionally partial fixtures explicitly restricted to tests.
 - Run CI without downloading complete training datasets; provide a separate full-model integration check.
+
+**Implementation status:** The foundation, strict v2 reader, BucketProvider, preflop classes, CLI and CI are implemented. See [build/test and import instructions](model-import.md). Complete external models and producer-supplied golden files were not available for this change; the separate integration check must still be run on those artifacts.
 
 **Boundary:** No poker trainer or frontend runtime yet. Legacy v1 support is optional and must not delay the v2 contract.
 

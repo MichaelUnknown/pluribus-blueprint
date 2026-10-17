@@ -4,7 +4,7 @@
 
 This document specifies a **new offline training program** for six-player no-limit Texas hold'em. Its inputs are three finished, complete information abstractions with 200 buckets each for the flop, turn, and river. Its output is a persistent distribution over legal actions for every represented abstract information set. The producer program's `train` command in [pluribus-information-abstraction](https://github.com/MichaelUnknown/pluribus-information-abstraction) trains clusters, **not a poker strategy**. This repository does not yet implement a training command.
 
-The existing data interface was checked against producer repository commit [`24615f8a018e68669c96fa60b2e0b03a95c11e64`](https://github.com/MichaelUnknown/pluribus-information-abstraction/commit/24615f8a018e68669c96fa60b2e0b03a95c11e64). Section 3 is a self-contained contract: an implementer needs the three binary models, but neither the producer repository's source code nor its running API server. All new CLI names, export formats, and architectural decisions below are **proposals**, not features that have already been implemented.
+The existing data interface was checked against producer repository commit [`24615f8a018e68669c96fa60b2e0b03a95c11e64`](https://github.com/MichaelUnknown/pluribus-information-abstraction/commit/24615f8a018e68669c96fa60b2e0b03a95c11e64). Section 3 is a self-contained contract: an implementer needs the three binary models, but neither the producer repository's source code nor its running API server. Milestone 1 model import is implemented as documented in the [model-import guide](model-import.md). Other trainer CLI names, export formats and architectural decisions below remain **proposals**.
 
 Implementation order and milestone numbers are defined exclusively in the [implementation roadmap](implementation-roadmap.md). This document specifies the target technical behavior; its section numbers are not milestones.
 
@@ -330,7 +330,7 @@ The single-threaded reference and small-game averaging oracle arrive in mileston
 
 For model import, use small synthetic files with known bytes and producer-supplied golden models. Synthetic pilots test the parser but do not establish complete coverage. For MCCFR, use independent expected results rather than repeating the implementation under test.
 
-Proposed new CLI (not yet available):
+Target CLI (`verify-models` is implemented; other commands below are not yet available):
 
 ```sh
 blueprint verify-models --flop flop/model.bin --turn turn/model.bin --river river/model.bin

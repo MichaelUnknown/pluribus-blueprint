@@ -10,7 +10,7 @@ These instructions apply throughout the repository. More specific `AGENTS.md` fi
 - Preserve existing behavior and compatibility unless the task specifically requires otherwise.
 
 ## Project scope and structure
-- This repository currently contains specifications and development conventions, not a runnable trainer or dashboard. Treat the stacks below as implementation targets until their build files exist.
+- This repository implements the milestone 1 C++20 foundation and model import. A trainer and dashboard are not implemented yet; consult `docs/model-import.md` for working commands.
 - `backend/`: C++20 / CMake poker engine, blueprint trainer, artifact readers, and API.
 - `frontend/`: Vue 3 / TypeScript / Vite dashboard for training progress and strategy inspection.
 - `docs/`: implementation and interface specifications. Read `README.md`, `docs/implementation-roadmap.md`, `docs/blueprint-implementation.md`, and `docs/blueprint-dashboard-spec.md` before changing architecture or contracts.
