@@ -18,7 +18,7 @@ jobs:
         run: cmake -S . -B build -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
       - name: Build
         run: cmake --build build --parallel 2
-      - name: Test synthetic models (no dataset downloads)
+      - name: Test models, poker engine and evaluator (no dataset downloads)
         run: ctest --test-dir build --output-on-failure
   sanitizers:
     runs-on: ubuntu-24.04

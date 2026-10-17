@@ -2,7 +2,7 @@
 
 An offline blueprint-strategy trainer for six-player no-limit Texas hold'em, inspired by Brown and Sandholm's [Pluribus paper](https://noambrown.com/papers/19-Science-Superhuman.pdf) and [supplement](https://noambrown.com/papers/19-Science-Superhuman_Supp.pdf).
 
-**Status:** milestone 1 foundation implemented: C++20/CMake library, v2 model reader, card canonicalization, 169 preflop classes, model verification/query CLI and dataset-free tests. Complete external-model integration validation is still pending. The trainer, API and dashboard are not implemented yet.
+**Status:** milestones 1–2 implemented: C++20/CMake model import and a deterministic six-player poker engine with betting, showdown and payouts. Complete external-model integration validation is still pending. The trainer, API and dashboard are not implemented yet.
 
 ## Planned scope
 
@@ -18,7 +18,7 @@ This project computes a blueprint. Real-time search and off-tree action translat
 - [Blueprint technical specification and input formats](docs/blueprint-implementation.md)
 - [Preliminary dashboard specification](docs/blueprint-dashboard-spec.md)
 
-The [model-import guide](docs/model-import.md) documents implemented build, test, configuration and CLI commands. Other proposed trainer commands, APIs and formats remain design targets. The dashboard mockup referenced in its specification is a separate design preview, not included in this repository.
+The [model-import guide](docs/model-import.md) and [poker-engine guide](docs/poker-engine.md) document implemented build, test, configuration and CLI commands. Other proposed trainer commands, APIs and formats remain design targets. The dashboard mockup referenced in its specification is a separate design preview, not included in this repository.
 
 ## Implementation sequence
 
@@ -48,3 +48,10 @@ ctest --test-dir build --output-on-failure
 ```
 
 See the [model-import guide](docs/model-import.md) for dependencies and complete-model integration checks.
+Run a deterministic check/call hand without model files:
+
+```sh
+build/backend/blueprint simulate-hand --seed 42
+```
+
+The [poker-engine guide](docs/poker-engine.md) describes rules, legal actions, hidden-information boundaries, settlement and validation.

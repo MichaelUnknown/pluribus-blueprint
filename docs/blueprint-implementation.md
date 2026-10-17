@@ -4,7 +4,7 @@
 
 This document specifies a **new offline training program** for six-player no-limit Texas hold'em. Its inputs are three finished, complete information abstractions with 200 buckets each for the flop, turn, and river. Its output is a persistent distribution over legal actions for every represented abstract information set. The producer program's `train` command in [pluribus-information-abstraction](https://github.com/MichaelUnknown/pluribus-information-abstraction) trains clusters, **not a poker strategy**. This repository does not yet implement a training command.
 
-The existing data interface was checked against producer repository commit [`24615f8a018e68669c96fa60b2e0b03a95c11e64`](https://github.com/MichaelUnknown/pluribus-information-abstraction/commit/24615f8a018e68669c96fa60b2e0b03a95c11e64). Section 3 is a self-contained contract: an implementer needs the three binary models, but neither the producer repository's source code nor its running API server. Milestone 1 model import is implemented as documented in the [model-import guide](model-import.md). Other trainer CLI names, export formats and architectural decisions below remain **proposals**.
+The existing data interface was checked against producer repository commit [`24615f8a018e68669c96fa60b2e0b03a95c11e64`](https://github.com/MichaelUnknown/pluribus-information-abstraction/commit/24615f8a018e68669c96fa60b2e0b03a95c11e64). Section 3 is a self-contained contract: an implementer needs the three binary models, but neither the producer repository's source code nor its running API server. Milestone 1 model import and milestone 2 poker rules are implemented as documented in the [model-import guide](model-import.md) and [poker-engine guide](poker-engine.md). Other trainer CLI names, export formats and architectural decisions below remain **proposals**.
 
 Implementation order and milestone numbers are defined exclusively in the [implementation roadmap](implementation-roadmap.md). This document specifies the target technical behavior; its section numbers are not milestones.
 
@@ -210,11 +210,13 @@ A minimal new trainer may explicitly support only v2 and reject v1 with a clear 
 
 ## 4. Implement the game model
 
+Implementation status: the milestone 2 reference engine implements this section using value copies, explicit street transitions and pure terminal settlement. Its exact rules/deal profiles, API, smoke command and validation are documented in the [poker-engine guide](poker-engine.md). There is no trainer yet.
+
 ### 4.1 Rules and state transitions
 
 For the first version, use six fixed seats relative to the button, a starting stack of 10,000 integer chips, SB 50, BB 100, no antes, and no rake. Reset stacks for every training hand. Explicitly store: street, acting seat, button, remaining stacks, total and street contributions per seat, fold/all-in flags, current bet-to amount, last full raise size, and which players still need to respond or are allowed to raise again.
 
-The engine needs `legal_actions`, `apply/undo`, `is_terminal`, `deal_next_street`, and `settle`. It must distinguish checks, folds, calls, full raises, and short all-in raises. A short all-in does not automatically reopen raising rights for players who have already acted. A round ends only when all players still able to act have fulfilled their obligations, not merely because contributions happen to be equal. Skip all-in players. If no decisions remain, complete the board and settle. Do not confuse heads-up action order after folds with the start of a new heads-up hand.
+The engine needs `legal_actions`, `apply` with copies (or correct undo), `is_terminal`, `deal_next_street`, and `settle`. It must distinguish checks, folds, calls, full raises, and short all-in raises. A short all-in does not automatically reopen raising rights for players who have already acted. A round ends only when all players still able to act have fulfilled their obligations, not merely because contributions happen to be equal. Skip all-in players. If no decisions remain, complete the board and settle. Do not confuse heads-up action order after folds with the start of a new heads-up hand.
 
 Build side pots from the distinct total contribution levels; folded players fund pots but are ineligible to win them. Return uncalled excess contributions. Evaluate the best five-card hand out of seven independently of the bucket class; split ties per pot. Implement a fixed odd-chip rule (first winner to the left of the button) and store it in the rules profile. Utility is `u_i = final_stack_i - starting_stack_i`, including blinds. Every terminal hand must satisfy `sum(u_i)=0`. A folded traverser can immediately return its loss once its final contribution is fixed.
 
